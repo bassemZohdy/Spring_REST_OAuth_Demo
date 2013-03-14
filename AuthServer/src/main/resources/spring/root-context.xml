@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd"
+	xmlns:c="http://www.springframework.org/schema/c" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p">
+	<mvc:default-servlet-handler />
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.jdbcurl}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+	</bean>
+	<context:property-placeholder location="classpath:db.properties" />
+
+	<aop:aspectj-autoproxy />
+	<bean class="org.spring.aspect.LoggerAspect"></bean>
+
+	<!-- <jdbc:initialize-database data-source="dataSource" enabled="true" ignore-failures="ALL"> 
+		<jdbc:script location="classpath:schema_MySql.sql" /> <jdbc:script location="classpath:test-data.sql" 
+		/> </jdbc:initialize-database> -->
+
+
+	<bean id="localeChangeInterceptor"
+		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="lang" />
+	</bean>
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
+
+	<bean id="themeSource" p:basenamePrefix="theme-"
+		class="org.springframework.ui.context.support.ResourceBundleThemeSource" />
+
+	<bean id="themeChangeInterceptor"
+		class="org.springframework.web.servlet.theme.ThemeChangeInterceptor" />
+
+	<bean id="themeResolver" p:defaultThemeName="default"
+		class="org.springframework.web.servlet.theme.CookieThemeResolver" />
+	<mvc:interceptors>
+		<ref bean="localeChangeInterceptor" />
+		<ref bean="themeChangeInterceptor" />
+	</mvc:interceptors>
+
+
+	<import resource="security-context.xml" />
+</beans>
