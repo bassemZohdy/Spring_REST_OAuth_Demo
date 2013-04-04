@@ -17,3 +17,7 @@ it is provide the resources required by resource consumer.
 * REST Client
 --------------
 Application using java script to access the resources required after getting a valid token from Auth Server
+
+Note:
+-----
+in this application I'm using HTTP for all requests as it is demo in real line all request contains tokne have to be HTTPS
